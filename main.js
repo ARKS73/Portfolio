@@ -87,3 +87,19 @@ window.closeModal = function () {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
+
+// ---- AUTO-SCROLL PROJECT IMAGES ----
+setInterval(() => {
+  const galleries = document.querySelectorAll('.scrollable-imgs');
+  galleries.forEach(gallery => {
+    const scrollAmount = gallery.clientWidth;
+    const maxScroll = gallery.scrollWidth - scrollAmount;
+    
+    // If we've reached the end (with a 5px margin for rounding errors), loop back to the start
+    if (gallery.scrollLeft >= maxScroll - 5) {
+      gallery.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  });
+}, 4000);

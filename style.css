@@ -30,23 +30,75 @@ html, body {
 .bg-grid {
   position: fixed; inset: 0; z-index: 0;
   background-image:
-    linear-gradient(rgba(0,220,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,220,255,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0,220,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,220,255,0.05) 1px, transparent 1px);
   background-size: 40px 40px;
+  animation: bg-pan 20s linear infinite;
+}
+
+@keyframes bg-pan {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
 }
 
 .bg-radial {
-  position: fixed; inset: 0; z-index: 1;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,85,255,0.12) 0%, transparent 80%);
+  position: fixed; inset: -50%; z-index: 1;
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0,100,255,0.15) 0%, transparent 80%);
+  animation: pulse-bg 8s ease-in-out infinite alternate;
 }
 
-.scan-line {
-  position: fixed; top: -5px; left: 0; right: 0; height: 2px; z-index: 2;
-  background: linear-gradient(90deg, transparent, var(--c1), transparent);
-  opacity: 0.3;
-  animation: scan 6s linear infinite;
+@keyframes pulse-bg {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
 }
-@keyframes scan { to { top: 105vh; } }
+
+/* ---- SYSTEMATIC BACKGROUND ANIMATION ---- */
+.sys-anim-container {
+  position: fixed; inset: 0; z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.sys-line {
+  position: absolute;
+  background: rgba(0,220,255,0.3);
+  box-shadow: 0 0 8px rgba(0,220,255,0.6);
+  opacity: 0.5;
+}
+.sys-line-1 {
+  width: 100vw; height: 1px; top: 15%;
+  animation: sys-scan-h 10s ease-in-out infinite alternate;
+}
+.sys-line-2 {
+  width: 1px; height: 100vh; left: 20%;
+  animation: sys-scan-v 12s ease-in-out infinite alternate;
+}
+.sys-line-3 {
+  width: 1px; height: 100vh; right: 20%;
+  animation: sys-scan-v 15s ease-in-out infinite alternate-reverse;
+}
+@keyframes sys-scan-h { 0% { top: 10%; opacity: 0.1; } 100% { top: 90%; opacity: 0.6; } }
+@keyframes sys-scan-v { 0% { left: 5%; opacity: 0.1; } 100% { left: 95%; opacity: 0.6; } }
+
+.sys-data-feed {
+  position: absolute;
+  top: 50%; left: 3%;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  color: rgba(0,200,255,0.4);
+  writing-mode: vertical-rl;
+  animation: data-scroll 5s linear infinite;
+  white-space: nowrap;
+}
+.sys-data-feed::after {
+  content: "SYS_INIT_001 \A BOOT_SEQ_ACTIVE \A SYNC_SERVER \A CORE_TEMP_OPT \A PWR_OVERRIDE_N";
+  white-space: pre-wrap;
+}
+@keyframes data-scroll {
+  0% { transform: translateY(-30px); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(30px); opacity: 0; }
+}
 
 /* ---- SCENE ---- */
 .scene {
@@ -530,17 +582,33 @@ html, body {
 .proj-img-wrap {
   position: relative;
   width: 100%;
-  height: 180px;
-  background: rgba(0,15,35,0.8);
+  height: 250px;
+  background: rgba(0, 5, 10, 0.95);
   border-bottom: 1px solid var(--glass-border);
   overflow: hidden;
+}
+
+.scrollable-imgs {
+  display: flex !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scrollable-imgs::-webkit-scrollbar {
+  display: none;
+}
+.scrollable-imgs .proj-img {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
 }
 
 /* Real image — hidden when src is empty */
 .proj-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.4s ease, opacity 0.4s;
   opacity: 0;  /* hidden until src is set */
@@ -740,17 +808,17 @@ html, body {
    RESPONSIVE
    ============================================ */
 @media (max-width: 640px) {
-  :root { --r: 200px; }
-  .bolt { width: 10px; height: 10px; }
-  .bolt:nth-child(1)  { transform: translate(-50%,-50%) rotate(0deg)   translateY(-95px); }
-  .bolt:nth-child(2)  { transform: translate(-50%,-50%) rotate(45deg)  translateY(-95px); }
-  .bolt:nth-child(3)  { transform: translate(-50%,-50%) rotate(90deg)  translateY(-95px); }
-  .bolt:nth-child(4)  { transform: translate(-50%,-50%) rotate(135deg) translateY(-95px); }
-  .bolt:nth-child(5)  { transform: translate(-50%,-50%) rotate(180deg) translateY(-95px); }
-  .bolt:nth-child(6)  { transform: translate(-50%,-50%) rotate(225deg) translateY(-95px); }
-  .bolt:nth-child(7)  { transform: translate(-50%,-50%) rotate(270deg) translateY(-95px); }
-  .bolt:nth-child(8)  { transform: translate(-50%,-50%) rotate(315deg) translateY(-95px); }
-  .name-big { font-size: 2rem; letter-spacing: 6px; }
-  .nav-titles { gap: 30px; }
+  .reactor {
+    transform: scale(0.7);
+    transform-origin: top center;
+    margin-bottom: -90px;
+  }
+  .click-hint {
+    margin-top: 10px;
+  }
+  .name-big { font-size: 2.2rem; letter-spacing: 6px; }
+  .name-sub { font-size: 0.6rem; letter-spacing: 2px; }
+  .nav-titles { gap: 15px; flex-wrap: wrap; justify-content: center; }
+  .nav-item { transform: scale(0.9); }
   .info-block { flex-direction: column; }
 }
