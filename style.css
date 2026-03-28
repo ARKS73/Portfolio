@@ -223,7 +223,7 @@ html, body {
   top: 0;
   left: 50%;
   margin-left: -11px;
-  transform-origin: 50% calc(100% + 84px);
+  transform-origin: 50% 132px; /* Fixed: 132px absolute prevents Safari shattered scale bug */
   background: linear-gradient(180deg, #0e1e2e 0%, #050d18 100%);
   border: 1px solid #0f1e2e;
   border-radius: 3px 3px 2px 2px;
@@ -281,7 +281,7 @@ html, body {
   top: 0;
   left: 50%;
   margin-left: -4px;
-  transform-origin: 50% calc(100% + 49px);
+  transform-origin: 50% 75px; /* Fixed: 75px absolute prevents Safari shattered scale bug */
   transition: background 0.8s, border-color 0.8s, box-shadow 0.8s;
 }
 .inner-flare:nth-child(1) { transform: rotate(0deg);   }
@@ -820,5 +820,6 @@ html, body {
   .name-sub { font-size: 0.6rem; letter-spacing: 2px; }
   .nav-titles { gap: 15px; flex-wrap: wrap; justify-content: center; }
   .nav-item { transform: scale(0.9); }
-  .info-block { flex-direction: column; }
+  .info-block { flex-direction: column; align-items: center; text-align: center; }
+  .tags { justify-content: center; }
 }
